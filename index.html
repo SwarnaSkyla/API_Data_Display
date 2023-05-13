@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contest F3-1</title>
+  <style>
+    table {
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      border: 1px solid black;
+      padding: 8px;
+    }
+  </style>
+</head>
+
+
+<body>
+  <button onclick="startPromiseChain()">Fetch Data</button>
+
+  <h2>TABLE-1</h2>
+  <table class="table" id="api1" style="display: none;">
+    <thead>
+      <td>Id</td>
+      <td>Title</td>
+      <td>Body</td>
+      <td>UserId</td>
+      <td>Tags</td>
+      <td>Reactions</td>
+    </thead>
+  </table>
+  <h2>TABLE-2</h2>
+  <table class="table" id="api2" style="display: none;">
+    <thead>
+      <td>Id</td>
+      <td>Title</td>
+      <td>Description</td>
+      <td>Price</td>
+      <td>Rating</td>
+      <td>Brand</td>
+
+    </thead>
+  </table>
+  <h2>TABLE-3</h2>
+  <table class="table" id="api3" style="display: none;">
+    <thead>
+      <td>Id</td>
+      <td>Todo</td>
+      <td>Completed</td>
+      <td>UserId</td>
+    </thead>
+  </table>
+
+  <script>
+    function PromiseAPI1() {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          fetch('https://dummyjson.com/posts')
+            .then(response => response.json())
+            .then(data => {
+
+              console.log(data.posts);
+              const table = document.getElementById("api1");
+              table.style.display = "block";
+              data.posts.forEach(post => {
+                let row = document.createElement('tr');
+                let col = document.createElement('td');
+                col.innerHTML = post.id;
+
+                let col1 = document.createElement('td');
+                col1.innerHTML = post.title;
+
+                let col2 = document.createElement('td');
+                col2.innerHTML = post.body;
+
+                let col3 = document.createElement('td');
+                col3.innerHTML = post.userId;
+
+                let col4 = document.createElement('td');
+                col4.innerHTML = post.tags;
+
+                let col5 = document.createElement('td');
+                col5.innerHTML = post.reactions;
+
+                table.append(row, col, col1, col2, col3, col4, col5)
+              });
+
+              resolve(true); // Resolve the promise
+            })
+            .catch(error => reject(error));
+        }, 1000);
+      });
+    }
+
+    function PromiseAPI2() {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          fetch('https://dummyjson.com/products')
+            .then(response => response.json())
+            .then(data => {
+
+
+              console.log(data.products);
+              const table = document.getElementById("api2");
+              table.style.display = "block";
+              data.products.forEach(product => {
+                let row = document.createElement('tr');
+                let col = document.createElement('td');
+                col.innerHTML = product.id;
+
+                let col1 = document.createElement('td');
+                col1.innerHTML = product.title;
+
+                let col2 = document.createElement('td');
+                col2.innerHTML = product.description;
+
+                let col3 = document.createElement('td');
+                col3.innerHTML = product.price;
+
+                let col4 = document.createElement('td');
+                col4.innerHTML = product.rating;
+
+                let col5 = document.createElement('td');
+                col5.innerHTML = product.brand;
+
+                table.append(row, col, col1, col2, col3, col4, col5)
+              });
+
+              resolve(true);
+            })
+            .catch(error => reject(error));
+        }, 2000);
+      });
+    }
+
+    function PromiseAPI3() {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          fetch('https://dummyjson.com/todos')
+            .then(response => response.json())
+            .then(data => {
+              console.log(data.todos);
+              const table = document.getElementById("api3");
+              table.style.display = "block";
+              data.todos.forEach(toDo => {
+                let row = document.createElement('tr');
+                let col = document.createElement('td');
+                col.innerHTML = toDo.id;
+
+                let col1 = document.createElement('td');
+                col1.innerHTML = toDo.todo;
+
+                let col2 = document.createElement('td');
+                col2.innerHTML = toDo.completed;
+
+                let col3 = document.createElement('td');
+                col3.innerHTML = toDo.userId;
+
+
+
+
+                table.append(row, col, col1, col2, col3)
+              });
+
+
+
+              resolve(true);
+            })
+            .catch(error => reject(error));
+        }, 3000);
+      });
+    }
+
+    function startPromiseChain() {
+      PromiseAPI1()
+        .then(Api => {
+          if (Api) {
+            return PromiseAPI2();
+          }
+        })
+        .then(Api => {
+          if (Api) {
+            return PromiseAPI3();
+          }
+        })
+        .catch(error => console.log(error));
+    }
+  </script>
+</body>
+
+</html>
